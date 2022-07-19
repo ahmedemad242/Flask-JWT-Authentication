@@ -3,7 +3,7 @@
 import os
 
 from FlaskJWT import create_app
-from FlaskJWT.config import SQLITE_DEV, SQLITE_PROD, SQLITE_TEST
+from FlaskJWT.config import SQLITE_DEV, PROD_DB_URL, SQLITE_TEST
 
 
 def test_config_development():
@@ -33,11 +33,9 @@ def test_config_production():
     assert app.config["SECRET_KEY"] != "A-secret-key"
     assert not app.config["TESTING"]
     assert app.config["SQLALCHEMY_DATABASE_URI"] == os.getenv(
-        "DATABASE_URL", SQLITE_PROD
+        "DATABASE_URL", PROD_DB_URL
     )
     assert app.config["TOKEN_EXPIRE_HOURS"] == 1
     assert app.config["TOKEN_EXPIRE_MINUTES"] == 0
     assert app.config["REFRESH_TOKEN_EXPIRE_MINUTES"] == 0
     assert app.config["REFRESH_TOKEN_EXPIRE_HOURS"] == 720
-
-

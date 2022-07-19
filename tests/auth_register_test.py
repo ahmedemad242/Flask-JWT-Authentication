@@ -28,6 +28,7 @@ def test_RegisterUser(client, db):
     user = User.findByPublicId(user_dict["publicId"])
     assert user and user.email == EMAIL
 
+
 def test_RegisterUserWithExistingDeviceId(client, db):
     response = registerUser(client, deviceId=uuid4())
     assert response.status_code == HTTPStatus.CREATED
@@ -44,6 +45,7 @@ def test_RegisterUserWithExistingDeviceId(client, db):
     user = User.findByPublicId(user_dict["publicId"])
     assert user and user.email == EMAIL
 
+
 def test_RegisterUserEmailAlreadyExist(client, db):
     User.insert(FIRSTNAME, LASTNAME, EMAIL, PASSWORD)
     response = registerUser(client)
@@ -54,6 +56,7 @@ def test_RegisterUserEmailAlreadyExist(client, db):
     assert "token_type" not in response.json
     assert "expires_in" not in response.json
     assert "access_token" not in response.json
+
 
 def test_RegisterUserInvalidEmail(client, db):
     invalidEmail = "teset12"

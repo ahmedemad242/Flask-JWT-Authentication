@@ -12,8 +12,7 @@ from FlaskJWT.models.refreshToken import RefreshToken
 from FlaskJWT.api.auth.decorators import token_required, refresh_token_required
 
 
-
-def processRegistrationRequest(firstName, lastName, email, password, deviceId = None):
+def processRegistrationRequest(firstName, lastName, email, password, deviceId=None):
     """
     Process requests to endpoint /auth/register
     return HTTP response containing access token, refresh token, and deviceID
@@ -31,18 +30,27 @@ def processRegistrationRequest(firstName, lastName, email, password, deviceId = 
     user = User.insert(firstName, lastName, email, password)
 
     accessToken = user.encodeAccessToken()
-    response = make_response(_successfulAuthResponse(accessToken, HTTPStatus.CREATED, "successfully registered"))
-    
+    response = make_response(
+        _successfulAuthResponse(
+            accessToken, HTTPStatus.CREATED, "successfully registered"
+        )
+    )
+
     if not deviceId:
         deviceId = _setDeviceIdCookie(response)
 
-    refreshExpireTime = datetime.utcnow() + timedelta(seconds=_getRefreshTokenExpireTime()) 
-    refreshToken = RefreshToken.generateRefreshToken(user.id, refreshExpireTime, deviceId)
+    refreshExpireTime = datetime.utcnow() + timedelta(
+        seconds=_getRefreshTokenExpireTime()
+    )
+    refreshToken = RefreshToken.generateRefreshToken(
+        user.id, refreshExpireTime, deviceId
+    )
 
     _setRefreshTokenCookie(response, refreshToken.token)
 
     return response
-    
+
+
 def processLoginRequest(email, password, deviceId):
     """
     Process requests to endpoint /auth/login
@@ -56,24 +64,33 @@ def processLoginRequest(email, password, deviceId):
 
     user = User.findByEmail(email)
     if not user or not user.checkPassword(password):
-        abort(HTTPStatus.UNAUTHORIZED, "Email or password are inncorrect.", status="fail")
+        abort(
+            HTTPStatus.UNAUTHORIZED, "Email or password are inncorrect.", status="fail"
+        )
 
     accessToken = user.encodeAccessToken()
-    response = make_response(_successfulAuthResponse(accessToken, HTTPStatus.OK, "successfully logged in"))
+    response = make_response(
+        _successfulAuthResponse(accessToken, HTTPStatus.OK, "successfully logged in")
+    )
 
     if not deviceId:
         deviceId = _setDeviceIdCookie(response)
 
     currentValid = RefreshToken.getActiveByDeviceAndUserId(deviceId, user.id)
 
-    refreshExpireTime = datetime.utcnow() + timedelta(seconds=_getRefreshTokenExpireTime()) 
-    refreshToken = RefreshToken.generateRefreshToken(user.id, refreshExpireTime, deviceId)
+    refreshExpireTime = datetime.utcnow() + timedelta(
+        seconds=_getRefreshTokenExpireTime()
+    )
+    refreshToken = RefreshToken.generateRefreshToken(
+        user.id, refreshExpireTime, deviceId
+    )
     if currentValid:
         currentValid.revoke(refreshToken.token)
 
     _setRefreshTokenCookie(response, refreshToken.token)
 
     return response
+
 
 @token_required
 def processLogoutRequest(islogoutAllDevices):
@@ -87,27 +104,27 @@ def processLogoutRequest(islogoutAllDevices):
             for tokenData in tokens:
                 tokenData.revoke()
     else:
-        tokenData = RefreshToken.getActiveByDeviceAndUserId(deviceId,user.id)
+        tokenData = RefreshToken.getActiveByDeviceAndUserId(deviceId, user.id)
         if tokenData:
             tokenData.revoke()
-        
-    return dict(status="success", message="successfully logged out"), HTTPStatus.OK
 
+    return dict(status="success", message="successfully logged out"), HTTPStatus.OK
 
 
 @token_required
 def getLoggedInUser():
     """
     Process requests to endpoint /auth/GetUser
-    return HTTP response containing user 
+    return HTTP response containing user
     """
 
     publicId = getLoggedInUser.publicId
     expiresAt = getLoggedInUser.exp
-    
+
     user = User.findByPublicId(publicId)
     user.tokenExpiresIn = expiresAt
     return user
+
 
 @refresh_token_required
 def refreshAccessToken():
@@ -119,10 +136,18 @@ def refreshAccessToken():
     tokenData = refreshAccessToken.tokenData
     accessToken = tokenData.user.encodeAccessToken()
 
-    response = make_response(_successfulAuthResponse(accessToken, HTTPStatus.OK, "successfully refreshed access token"))
+    response = make_response(
+        _successfulAuthResponse(
+            accessToken, HTTPStatus.OK, "successfully refreshed access token"
+        )
+    )
 
-    refreshExpireTime = datetime.utcnow() + timedelta(seconds=_getRefreshTokenExpireTime()) 
-    refreshToken = RefreshToken.generateRefreshToken(tokenData.userId, refreshExpireTime, refreshAccessToken.deviceId)
+    refreshExpireTime = datetime.utcnow() + timedelta(
+        seconds=_getRefreshTokenExpireTime()
+    )
+    refreshToken = RefreshToken.generateRefreshToken(
+        tokenData.userId, refreshExpireTime, refreshAccessToken.deviceId
+    )
 
     tokenData.revoke(refreshToken.token)
 
@@ -140,9 +165,12 @@ def _setDeviceIdCookie(response):
     """
 
     deviceId = _generateDeviceId()
-    response.set_cookie("deviceId", deviceId, max_age= 2147483647, httponly = True, samesite = "Strict")
+    response.set_cookie(
+        "deviceId", deviceId, max_age=2147483647, httponly=True, samesite="Strict"
+    )
 
     return deviceId
+
 
 def _generateDeviceId():
     """
@@ -150,6 +178,7 @@ def _generateDeviceId():
     """
 
     return str(uuid4())
+
 
 def _setRefreshTokenCookie(response, refreshToken):
     """
@@ -160,8 +189,15 @@ def _setRefreshTokenCookie(response, refreshToken):
         refreshToken    - String
     """
 
-    response.set_cookie("refreshToken", refreshToken, max_age  = _getRefreshTokenExpireTime(),\
-         httponly = True, samesite = "Strict", path = '/api/v1/auth/refresh')
+    response.set_cookie(
+        "refreshToken",
+        refreshToken,
+        max_age=_getRefreshTokenExpireTime(),
+        httponly=True,
+        samesite="Strict",
+        path="/api/v1/auth/refresh",
+    )
+
 
 def _successfulAuthResponse(accessToken, status_code, message):
     """
@@ -186,6 +222,7 @@ def _successfulAuthResponse(accessToken, status_code, message):
 
     return response
 
+
 def _getAccessTokenExpireTime():
     """
     returns the access token expiration time from enviromntal variables
@@ -196,6 +233,7 @@ def _getAccessTokenExpireTime():
     expireTimeSeconds = tokenAgeHours * 3600 + tokenAgeMinutes * 60
     return expireTimeSeconds if not current_app.config["TESTING"] else 5
 
+
 def _getRefreshTokenExpireTime():
     """
     returns the refresh token expiration time from enviromntal variables
@@ -205,7 +243,3 @@ def _getRefreshTokenExpireTime():
     tokenAgeMinutes = current_app.config.get("REFRESH_TOKEN_EXPIRE_MINUTES")
     expireTimeSeconds = tokenAgeHours * 3600 + tokenAgeMinutes * 60
     return expireTimeSeconds if not current_app.config["TESTING"] else 6
-
-
-
-

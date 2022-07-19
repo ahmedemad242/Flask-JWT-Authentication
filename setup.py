@@ -32,7 +32,11 @@ INSTALL_REQUIRES = [
 
 EXTRAS_REQUIRE = {
     "dev": [
+        "black",
+        "pre-commit",
+        "pydocstyle",
         "pytest",
+        "pytest-black",
         "pytest-clarity",
         "pytest-dotenv",
         "pytest-flask",

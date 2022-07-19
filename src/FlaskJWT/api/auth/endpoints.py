@@ -6,22 +6,23 @@ from flask import request
 from flask_restx import Namespace, Resource
 
 from FlaskJWT.api.auth.dto import (
-                                registerReqParser, 
-                                loginReqParser, 
-                                refreshReqParser, 
-                                userModel, 
-                                logoutParser,
-                            )                        
+    registerReqParser,
+    loginReqParser,
+    refreshReqParser,
+    userModel,
+    logoutParser,
+)
 from FlaskJWT.api.auth.business import (
-                                    processRegistrationRequest, 
-                                    processLoginRequest, 
-                                    getLoggedInUser, 
-                                    refreshAccessToken, 
-                                    processLogoutRequest,
-                                )
+    processRegistrationRequest,
+    processLoginRequest,
+    getLoggedInUser,
+    refreshAccessToken,
+    processLogoutRequest,
+)
 
 auth_ns = Namespace(name="auth", validate=True)
 auth_ns.models[userModel.name] = userModel
+
 
 @auth_ns.route("/register", endpoint="RegisterUser")
 class RegisterUser(Resource):
@@ -42,6 +43,7 @@ class RegisterUser(Resource):
         deviceId = requestData.get("deviceId")
         return processRegistrationRequest(firstName, lastName, email, password, deviceId)
 
+
 @auth_ns.route("/login", endpoint="LoginUser")
 class LoginUser(Resource):
     """Handles HTTP requests to URL: /api/v1/auth/login."""
@@ -59,6 +61,7 @@ class LoginUser(Resource):
         deviceId = requestData.get("deviceId")
         return processLoginRequest(email, password, deviceId)
 
+
 @auth_ns.route("/user", endpoint="GetUser")
 class GetUser(Resource):
     """Handles HTTP requests to URL: /api/v1/auth/user."""
@@ -68,10 +71,10 @@ class GetUser(Resource):
     @auth_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
     @auth_ns.response(int(HTTPStatus.UNAUTHORIZED), "Token is invalid or expired.")
     @auth_ns.marshal_with(userModel)
-
     def get(self):
         """Validate access token and return user info."""
         return getLoggedInUser()
+
 
 @auth_ns.route("/refresh", endpoint="Refresh")
 class Refresh(Resource):
@@ -81,11 +84,13 @@ class Refresh(Resource):
     @auth_ns.doc(security="cookieAuth")
     @auth_ns.response(int(HTTPStatus.OK), "Refresh token successfully refreshed.")
     @auth_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
-    @auth_ns.response(int(HTTPStatus.UNAUTHORIZED), "Token or cookie is invalid or expired.")
-
+    @auth_ns.response(
+        int(HTTPStatus.UNAUTHORIZED), "Token or cookie is invalid or expired."
+    )
     def get(self):
         """Refresh access token given a refresh token and a deviceId"""
         return refreshAccessToken()
+
 
 @auth_ns.route("/logout", endpoint="LogoutUser")
 class LogoutUser(Resource):

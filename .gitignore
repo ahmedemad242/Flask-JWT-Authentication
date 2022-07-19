@@ -19,6 +19,7 @@ _mailinglist
 docs/_build/
 .vscode
 *.db
+pip-wheel-metadata/
 # Coverage reports
 htmlcov/
 .coverage

@@ -12,6 +12,7 @@ SUCCESS = "successfully logged out"
 
 ##TODO:: Rewrite test case with removing the string parsing into a more robust solution
 
+
 def test_logoutCurrentDevice(client, db):
     response = registerUser(client)
     deviceId = response.headers["Set-Cookie"].split(";")[0].split("=")[1]
@@ -26,5 +27,4 @@ def test_logoutCurrentDevice(client, db):
     assert "status" in response.json and response.json["status"] == "success"
 
     refreshToken = RefreshToken.getActiveByDeviceAndUserId(deviceId, user.id)
-    assert not refreshToken 
-    
+    assert not refreshToken

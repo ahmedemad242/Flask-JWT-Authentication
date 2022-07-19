@@ -9,6 +9,7 @@ from flask import current_app
 from FlaskJWT import db, bcrypt
 from FlaskJWT.util.result import Result
 
+
 class User(db.Model):
     """
     User model to store the login creadentials
@@ -26,7 +27,7 @@ class User(db.Model):
         tokens         -   List        -   List of all refresh tokens used by the user
     """
 
-    __tablename__ = "client"    
+    __tablename__ = "client"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     publicId = db.Column(db.String(36), unique=True, default=lambda: str(uuid4()))
@@ -36,7 +37,7 @@ class User(db.Model):
     passwordHash = db.Column(db.String(100), nullable=False)
     registeredOn = db.Column(db.DateTime, default=datetime.utcnow)
     lastLogin = db.Column(db.DateTime, default=datetime.utcnow)
-    tokens = db.relationship('RefreshToken', backref='user', lazy=True)
+    tokens = db.relationship("RefreshToken", backref="user", lazy=True)
 
     def __init__(self, firstName, lastName, email, password, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -51,9 +52,9 @@ class User(db.Model):
 
     @classmethod
     def insert(cls, firstName, lastName, email, password):
-        '''
+        """
         inserts user to the database and returns the newly created user
-        '''
+        """
 
         user = User(firstName, lastName, email, password)
         db.session.add(user)
@@ -63,9 +64,9 @@ class User(db.Model):
 
     @classmethod
     def delete(cls, id):
-        '''
-        removes user from the database 
-        '''
+        """
+        removes user from the database
+        """
 
         user = cls.query.findByID(id)
         db.session.delete(user)
@@ -73,10 +74,10 @@ class User(db.Model):
 
     @classmethod
     def update(cls, id, firstName, lastName, email, password):
-        '''
+        """
         updates existing user record and returns the updated user
-        '''
-        
+        """
+
         user = cls.query.get(id)
 
         user.firstName = firstName
@@ -90,36 +91,36 @@ class User(db.Model):
 
     @classmethod
     def findByEmail(cls, email):
-        '''
-        Returns user data given a valid email 
+        """
+        Returns user data given a valid email
         -----
         parameters:
             email - String
-        '''
+        """
 
         user = cls.query.filter_by(email=email).first()
         return user
 
     @classmethod
     def findByPublicId(cls, publicId):
-        '''
+        """
         Returns user data given a valid publicId
         -----
         parameters:
             publicId - String
-        '''
+        """
 
         user = cls.query.filter_by(publicId=publicId).first()
         return user
 
     @classmethod
     def findByID(cls, id):
-        '''
+        """
         Returns user data given a valid id
         -----
         parameters:
             id - int
-        '''
+        """
 
         user = cls.query.filter_by(id=id).first()
         return user
@@ -130,31 +131,31 @@ class User(db.Model):
 
     @password.setter
     def password(self, password):
-        '''
-        Sets password in database as a hash 
+        """
+        Sets password in database as a hash
         -----
         parameters:
             password - String
-        '''
+        """
 
         log_rounds = current_app.config.get("BCRYPT_LOG_ROUNDS")
         hash_bytes = bcrypt.generate_password_hash(password, log_rounds)
         self.passwordHash = hash_bytes.decode("utf-8")
 
     def checkPassword(self, password):
-        '''
+        """
         Returns true if a given password matches database
         -----
         parameters:
             password - String
-        '''
+        """
 
         return bcrypt.check_password_hash(self.passwordHash, password)
 
     def encodeAccessToken(self):
-        '''
+        """
         Returns an access token for a user
-        '''
+        """
 
         timeNow = datetime.utcnow()
         tokenAgeHours = current_app.config.get("TOKEN_EXPIRE_HOURS")
@@ -172,11 +173,11 @@ class User(db.Model):
 
     @staticmethod
     def decodeAccessToken(accessToken):
-        '''
+        """
         Returns user given a non expired valid access token
          parameters:
             accessToken - String
-        '''
+        """
 
         if isinstance(accessToken, bytes):
             accessToken = accessToken.decode("ascii")
@@ -186,7 +187,7 @@ class User(db.Model):
         try:
             key = current_app.config.get("SECRET_KEY")
             payload = jwt.decode(accessToken, key, algorithms=["HS256"])
-        #TODO: handle these errors
+        # TODO: handle these errors
         except jwt.ExpiredSignatureError:
             return Result.fail("token expired. Please log in again.")
         except jwt.InvalidTokenError:
@@ -199,4 +200,3 @@ class User(db.Model):
         }
 
         return Result.success(user_dict)
-

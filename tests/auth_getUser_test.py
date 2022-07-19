@@ -5,7 +5,15 @@ import pytest
 from http import HTTPStatus
 
 from flask import url_for
-from tests.util import EMAIL, WWW_AUTH_NO_TOKEN, TOKEN_EXPIRED, WWW_AUTH_EXPIRED_TOKEN, registerUser, loginUser, getUser
+from tests.util import (
+    EMAIL,
+    WWW_AUTH_NO_TOKEN,
+    TOKEN_EXPIRED,
+    WWW_AUTH_EXPIRED_TOKEN,
+    registerUser,
+    loginUser,
+    getUser,
+)
 
 
 def test_authUser(client, db):
@@ -17,12 +25,14 @@ def test_authUser(client, db):
     assert response.status_code == HTTPStatus.OK
     assert "email" in response.json and response.json["email"] == EMAIL
 
+
 def test_authUserNoToken(client, db):
     response = client.get(url_for("api.GetUser"))
     assert response.status_code == HTTPStatus.UNAUTHORIZED
     assert "message" in response.json and response.json["message"] == "Unauthorized"
     assert "WWW-Authenticate" in response.headers
     assert response.headers["WWW-Authenticate"] == WWW_AUTH_NO_TOKEN
+
 
 @pytest.mark.delay
 def test_authUserExpiredToken(client, db):

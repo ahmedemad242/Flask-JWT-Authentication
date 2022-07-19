@@ -9,10 +9,10 @@ from FlaskJWT.models.user import User
 from tests.util import TOKEN_EXPIRED
 
 
-
 def test_encodeAccessToken(user):
     accesToken = user.encodeAccessToken()
     assert isinstance(accesToken, str)
+
 
 def test_decodeAccessToken(user):
     accesToken = user.encodeAccessToken()
@@ -21,6 +21,7 @@ def test_decodeAccessToken(user):
     user_dict = result.value
     assert user_dict["publicId"] == user.publicId
 
+
 @pytest.mark.delay
 def test_decodeAccessTokenExpired(user):
     accesToken = user.encodeAccessToken()
@@ -28,6 +29,7 @@ def test_decodeAccessTokenExpired(user):
     result = User.decodeAccessToken(accesToken)
     assert not result.success
     assert result.error == TOKEN_EXPIRED
+
 
 def test_decodeAccessTokenInvalid(user):
     accesToken = user.encodeAccessToken()

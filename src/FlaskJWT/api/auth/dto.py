@@ -18,12 +18,12 @@ registerReqParser.add_argument(
 registerReqParser.add_argument(
     name="email", type=email(), location="form", required=True, nullable=False
 )
-#TODO: Add password validation
+# TODO: Add password validation
 registerReqParser.add_argument(
     name="password", type=str, location="form", required=True, nullable=False
 )
 registerReqParser.add_argument(
-    name = 'deviceId', type=str, location='cookies', required=False
+    name="deviceId", type=str, location="cookies", required=False
 )
 
 ###Login parser
@@ -36,26 +36,25 @@ loginReqParser.add_argument(
     name="password", type=str, location="form", required=True, nullable=False
 )
 loginReqParser.add_argument(
-    name = 'deviceId', type=str, location='cookies', required=False
+    name="deviceId", type=str, location="cookies", required=False
 )
 
 ###Refresh parser
 refreshReqParser = RequestParser(bundle_errors=True)
 
 refreshReqParser.add_argument(
-    name = 'refreshToken', type=str, location='cookies', required=False
+    name="refreshToken", type=str, location="cookies", required=False
 )
 refreshReqParser.add_argument(
-    name = 'deviceId', type=str, location='cookies', required=False
+    name="deviceId", type=str, location="cookies", required=False
 )
 
 ###Logout parser
 logoutParser = RequestParser(bundle_errors=True)
 
 logoutParser.add_argument(
-    name = 'logoutAllDevices', type=bool, location='form', required=False
+    name="logoutAllDevices", type=bool, location="form", required=False
 )
-
 
 
 ###User model

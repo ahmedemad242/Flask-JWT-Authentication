@@ -19,6 +19,7 @@ def create_app(congifName):
     app.config.from_object(getConfig(congifName))
 
     from FlaskJWT.api import apiBp
+
     app.register_blueprint(apiBp)
 
     cors.init_app(app)

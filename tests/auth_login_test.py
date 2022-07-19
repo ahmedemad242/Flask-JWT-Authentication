@@ -11,6 +11,7 @@ UNAUTHORIZED = "Email or password are inncorrect."
 
 ##TODO:: Rewrite test case with removing the string parsing into a more robust solution
 
+
 def test_login(client, db):
     registerUser(client)
     response = loginUser(client)
@@ -18,14 +19,15 @@ def test_login(client, db):
     assert "status" in response.json and response.json["status"] == "success"
     assert "message" in response.json and response.json["message"] == SUCCESS
     assert "access_token" in response.json
-    assert "refreshToken" in response.headers["Set-Cookie"] 
+    assert "refreshToken" in response.headers["Set-Cookie"]
     access_token = response.json["access_token"]
     result = User.decodeAccessToken(access_token)
     assert result.success
     token_payload = result.value
     user = User.findByPublicId(token_payload["publicId"])
     assert user and user.email == EMAIL
-    
+
+
 def test_loginWithoutDeviceId(client, db):
     registerUser(client)
     client.cookie_jar.clear()
@@ -42,6 +44,7 @@ def test_loginWithoutDeviceId(client, db):
     token_payload = result.value
     user = User.findByPublicId(token_payload["publicId"])
     assert user and user.email == EMAIL
+
 
 def test_loginWithExistingValidRefreshToken(client, db):
     registerUser(client)

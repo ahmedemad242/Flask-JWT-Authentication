@@ -10,25 +10,26 @@ from FlaskJWT.models.user import User
 
 
 def token_required(f):
-    """ 
-    Execute function if request contains valid access token. 
+    """
+    Execute function if request contains valid access token.
     """
 
     @wraps(f)
     def decorated(*args, **kwargs):
         deviceId = request.cookies.get("deviceId")
         setattr(decorated, "deviceId", deviceId)
-        
+
         tokenPayload = _checkAccessToken()
         for name, val in tokenPayload.items():
             setattr(decorated, name, val)
         return f(*args, **kwargs)
 
     return decorated
- 
+
+
 def refresh_token_required(f):
-    """ 
-    Execute function if request contains valid refresh token sent from a valid device. 
+    """
+    Execute function if request contains valid refresh token sent from a valid device.
     """
 
     @wraps(f)
@@ -43,35 +44,36 @@ def refresh_token_required(f):
 
 
 def _checkDeviceId():
-    """ 
+    """
     Checks that a request contains a cookie with a deviceId
     """
 
-    deviceId = request.cookies.get("deviceId") 
+    deviceId = request.cookies.get("deviceId")
     if not deviceId:
         raise ApiUnauthorized(
             description="Unauthorized",
             error="invalid_deviceId",
             errorDescription="deviceId is not valid, please login again",
-        )           
+        )
     return deviceId
 
+
 def _checkRefreshToken(deviceId):
-    """ 
+    """
     Checks refresh token validity given a deviceID
     returns a token object from database
     -----
     parameter:
-        deviceId - String 
+        deviceId - String
     """
 
-    token = request.cookies.get("refreshToken") 
+    token = request.cookies.get("refreshToken")
 
     if not token:
         raise ApiUnauthorized(description="Unauthorized")
 
     tokenData = RefreshToken.getTokenData(token)
-    
+
     if not tokenData:
         raise ApiUnauthorized(
             description="token is invalid, please login again",
@@ -85,8 +87,7 @@ def _checkRefreshToken(deviceId):
             error="invalid_token",
             errorDescription="token expired. Please log in again.",
         )
-        
-    
+
     if tokenData.deviceId != deviceId:
         tokenData.revoke()
         raise ApiUnauthorized(
@@ -94,12 +95,12 @@ def _checkRefreshToken(deviceId):
             error="invalid_token",
             errorDescription="token is used from unauthorized device, please login again",
         )
-    
+
     return tokenData
 
 
 def _checkAccessToken():
-    """ 
+    """
     Checks access token validity and returns user data containing publicId
     """
 

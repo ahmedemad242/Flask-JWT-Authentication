@@ -11,7 +11,7 @@ PROD_DB_PASSWORD = os.getenv("DB_PASSWORD")
 PROD_DB_NAME = os.getenv("DB_NAME")
 PROD_DB_PORT = os.getenv("DB_PORT")
 PROD_DB_HOST = os.getenv("DB_HOST")
-PROD_DB_URL = f"postgresql+psycopg2://{PROD_DB_USER}:{PROD_DB_PASSWORD}@{PROD_DB_HOST}:{PROD_DB_PORT}/{PROD_DB_NAME}" 
+PROD_DB_URL = f"postgresql+psycopg2://{PROD_DB_USER}:{PROD_DB_PASSWORD}@{PROD_DB_HOST}:{PROD_DB_PORT}/{PROD_DB_NAME}"
 
 
 class Config:
@@ -29,7 +29,6 @@ class Config:
     RESTX_MASK_SWAGGER = False
     JSON_SORT_KEYS = False
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
-
 
 
 class TestingConfig(Config):

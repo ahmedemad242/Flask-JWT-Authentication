@@ -11,4 +11,3 @@ class Result:
     @staticmethod
     def fail(errorMessage):
         return Result(False, value=None, error=errorMessage)
- 

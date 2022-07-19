@@ -9,10 +9,20 @@ from http import HTTPStatus
 
 from FlaskJWT.models.user import User
 from FlaskJWT.models.refreshToken import RefreshToken
-from tests.util import EMAIL, registerUser, loginUser, refreshToken as refreshTokenHelper, getUser,\
-     EMAIL, TOKEN_EXPIRED, TOKEN_INVAILD, UNAUTH_DEVICE_ID
+from tests.util import (
+    EMAIL,
+    registerUser,
+    loginUser,
+    refreshToken as refreshTokenHelper,
+    getUser,
+    EMAIL,
+    TOKEN_EXPIRED,
+    TOKEN_INVAILD,
+    UNAUTH_DEVICE_ID,
+)
 
 ##TODO:: Rewrite test case with removing the string parsing into a more robust solution
+
 
 @pytest.mark.delay
 def test_refreshToken(client, db):
@@ -24,7 +34,7 @@ def test_refreshToken(client, db):
     response = getUser(client, accessToken)
     user = json.loads(response.data)
 
-    assert user['email'] == EMAIL
+    assert user["email"] == EMAIL
 
     time.sleep(1)
 
@@ -32,10 +42,11 @@ def test_refreshToken(client, db):
 
     newRefreshToken = response.headers["Set-Cookie"].split(";")[0].split("=")[1]
     newAccessToken = response.json["access_token"]
-    
+
     assert newRefreshToken != refreshToken
     assert not RefreshToken.getTokenData(refreshToken).isValid.success
     assert newAccessToken != accessToken
+
 
 @pytest.mark.delay
 def test_expiredRefreshToken(client, db):
@@ -48,9 +59,10 @@ def test_expiredRefreshToken(client, db):
     response = refreshTokenHelper(client, deviceId, refreshToken)
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert "message" in response.json 
+    assert "message" in response.json
     assert response.json["message"] == TOKEN_EXPIRED
     assert "WWW-Authenticate" in response.headers
+
 
 def test_invaildRefreshToken(client, db):
     response = registerUser(client)
@@ -59,9 +71,10 @@ def test_invaildRefreshToken(client, db):
     response = refreshTokenHelper(client, deviceId, str(uuid4()))
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert "message" in response.json 
+    assert "message" in response.json
     assert response.json["message"] == TOKEN_INVAILD
     assert "WWW-Authenticate" in response.headers
+
 
 def test_unauthDevice(client, db):
     response = registerUser(client)
@@ -72,9 +85,6 @@ def test_unauthDevice(client, db):
     assert not RefreshToken.getTokenData(refreshToken).isValid.success
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert "message" in response.json 
+    assert "message" in response.json
     assert response.json["message"] == UNAUTH_DEVICE_ID
     assert "WWW-Authenticate" in response.headers
-
-
-
