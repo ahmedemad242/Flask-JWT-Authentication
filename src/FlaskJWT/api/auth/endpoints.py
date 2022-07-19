@@ -11,7 +11,7 @@ from FlaskJWT.api.auth.dto import (
                                 refreshReqParser, 
                                 userModel, 
                                 logoutParser,
-                            )
+                            )                        
 from FlaskJWT.api.auth.business import (
                                     processRegistrationRequest, 
                                     processLoginRequest, 

@@ -6,8 +6,12 @@ from pathlib import Path
 HERE = Path(__file__).parent
 SQLITE_DEV = "sqlite:///" + str(HERE / "FlaskJWT_db_dev.db")
 SQLITE_TEST = "sqlite:///" + str(HERE / "FlaskJWT_test.db")
-#TODO: Use production database
-SQLITE_PROD = "sqlite:///" + str(HERE / "FlaskJWT_prod.db")
+PROD_DB_USER = os.getenv("DB_USER")
+PROD_DB_PASSWORD = os.getenv("DB_PASSWORD")
+PROD_DB_NAME = os.getenv("DB_NAME")
+PROD_DB_PORT = os.getenv("DB_PORT")
+PROD_DB_HOST = os.getenv("DB_HOST")
+PROD_DB_URL = f"postgresql+psycopg2://{PROD_DB_USER}:{PROD_DB_PASSWORD}@{PROD_DB_HOST}:{PROD_DB_PORT}/{PROD_DB_NAME}" 
 
 
 class Config:
@@ -45,9 +49,9 @@ class ProductionConfig(Config):
     """Production configuration."""
 
     TOKEN_EXPIRE_HOURS = 1
-    REFRESH_TOKEN_EXPIRE_HOURS = 24 * 31
+    REFRESH_TOKEN_EXPIRE_HOURS = 720
     BCRYPT_LOG_ROUNDS = 13
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", SQLITE_PROD)
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", PROD_DB_URL)
     PRESERVE_CONTEXT_ON_EXCEPTION = True
 
 

@@ -29,8 +29,6 @@ def upgrade():
     sa.Column('lastLogin', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('firstName'),
-    sa.UniqueConstraint('lastName'),
     sa.UniqueConstraint('publicId')
     )
     # ### end Alembic commands ###

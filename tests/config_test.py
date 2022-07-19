@@ -13,6 +13,8 @@ def test_config_development():
     assert app.config["SQLALCHEMY_DATABASE_URI"] == os.getenv("DATABASE_URL", SQLITE_DEV)
     assert app.config["TOKEN_EXPIRE_HOURS"] == 0
     assert app.config["TOKEN_EXPIRE_MINUTES"] == 15
+    assert app.config["REFRESH_TOKEN_EXPIRE_MINUTES"] == 30
+    assert app.config["REFRESH_TOKEN_EXPIRE_HOURS"] == 0
 
 
 def test_config_testing():
@@ -22,6 +24,8 @@ def test_config_testing():
     assert app.config["SQLALCHEMY_DATABASE_URI"] == SQLITE_TEST
     assert app.config["TOKEN_EXPIRE_HOURS"] == 0
     assert app.config["TOKEN_EXPIRE_MINUTES"] == 0
+    assert app.config["REFRESH_TOKEN_EXPIRE_MINUTES"] == 0
+    assert app.config["REFRESH_TOKEN_EXPIRE_HOURS"] == 0
 
 
 def test_config_production():
@@ -33,5 +37,7 @@ def test_config_production():
     )
     assert app.config["TOKEN_EXPIRE_HOURS"] == 1
     assert app.config["TOKEN_EXPIRE_MINUTES"] == 0
+    assert app.config["REFRESH_TOKEN_EXPIRE_MINUTES"] == 0
+    assert app.config["REFRESH_TOKEN_EXPIRE_HOURS"] == 720
 
 

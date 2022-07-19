@@ -23,9 +23,10 @@ class User(db.Model):
         passwordHash   -   String      -   Hash of user's password
         registeredOn   -   datetime    -   Date & time of account creation
         lastLogin      -   datetime    -   last time the user sent a request to the server
+        tokens         -   List        -   List of all refresh tokens used by the user
     """
 
-    __tablename__ = "client"
+    __tablename__ = "client"    
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     publicId = db.Column(db.String(36), unique=True, default=lambda: str(uuid4()))

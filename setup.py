@@ -27,6 +27,7 @@ INSTALL_REQUIRES = [
     "requests",
     "urllib3",
     "werkzeug",
+    "psycopg2",
 ]
 
 EXTRAS_REQUIRE = {
