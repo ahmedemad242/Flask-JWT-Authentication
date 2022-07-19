@@ -1,27 +1,35 @@
 # Flask-JWT-Authentication
-A simple implementation of ```json web token``` based user authentication in flask which includes the following features:
+
+A simple implementation of `json web token` based user authentication in flask which includes the following features:
+
 - Access token
 - Refresh Token
 - Revoking/ Blacklisting refresh tokens
 - Refresh token recycling
 
 ## Installation
+
 ### Virtual environments
 
-``` 
+```
 $ python -m venv venv
 $ .\venv\scripts\activate
 $ pip install --upgrade pip setuptools wheel
 $ pip install -e .[dev]
 ```
 
+### Environment variables
+
+Add environment varaibles to .env file
+
 ### Running
- 
+
 ```
+$ flask db upgrade
 $ flask run
 ```
 
-### Application Structure
+## Application Structure
 
 ```
 app/
@@ -33,11 +41,19 @@ app/
     ├── models
     ├── util
     └── api
-        └── auth     
+        └── auth
+```
+
+## Running Docker container
+
+```
+docker build -t flaskjwt:latest .
+docker run -it -p 5000:5000 flaskjwt:latest
 ```
 
 ## API documentation
-The API is documented using Swagger UI. Run server and navigate to ```/api/v1/ui```
+
+The API is documented using Swagger UI. Run server and navigate to `/api/v1/ui`
 
 ## License
 

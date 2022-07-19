@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-#TODO: Use different path with right dbs, move these to the .env file
+
 HERE = Path(__file__).parent
 SQLITE_DEV = "sqlite:///" + str(HERE / "FlaskJWT_db_dev.db")
 SQLITE_TEST = "sqlite:///" + str(HERE / "FlaskJWT_test.db")
@@ -28,6 +28,8 @@ class Config:
     SWAGGER_UI_DOC_EXPANSION = "list"
     RESTX_MASK_SWAGGER = False
     JSON_SORT_KEYS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
+
 
 
 class TestingConfig(Config):
