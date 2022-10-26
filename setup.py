@@ -15,7 +15,7 @@ PROJECT_URLS = {
     "Source Code": "https://github.com/ahmedemad242/Flask-JWT-Authentication",
 }
 INSTALL_REQUIRES = [
-    "Flask",
+    "Flask==2.1.0",
     "Flask-Bcrypt",
     "Flask-Cors",
     "Flask-Migrate",
@@ -26,20 +26,21 @@ INSTALL_REQUIRES = [
     "python-dotenv",
     "requests",
     "urllib3",
-    "werkzeug",
+    "werkzeug==2.1.2",
     "psycopg2",
 ]
 
 EXTRAS_REQUIRE = {
     "dev": [
         "black",
+        "flake8",
         "pre-commit",
         "pydocstyle",
         "pytest",
-        "pytest-black",
         "pytest-clarity",
         "pytest-dotenv",
         "pytest-flask",
+        "tox",
     ]
 }
 
@@ -58,7 +59,7 @@ setup(
     project_urls=PROJECT_URLS,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     install_requires=INSTALL_REQUIRES,
     extras_require=EXTRAS_REQUIRE,
 )

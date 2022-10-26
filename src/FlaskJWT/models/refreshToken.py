@@ -105,7 +105,7 @@ class RefreshToken(db.Model):
             and_(
                 cls.userId == userId,
                 datetime.utcnow() < cls.expiresOn,
-                cls.revokedOn == None,
+                cls.revokedOn == None,  # noqa
             )
         )
         return query
@@ -117,7 +117,7 @@ class RefreshToken(db.Model):
                 cls.userId == userId,
                 cls.deviceId == deviceId,
                 datetime.utcnow() < cls.expiresOn,
-                cls.revokedOn == None,
+                cls.revokedOn == None,  # noqa
             )
         ).first()
         return query

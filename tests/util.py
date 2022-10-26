@@ -20,7 +20,7 @@ WWW_AUTH_EXPIRED_TOKEN = (
     f'error_description="{TOKEN_EXPIRED}"'
 )
 
-###Refresh token messages
+### Refresh token messages
 TOKEN_INVAILD = "token is invalid, please login again"
 UNAUTH_DEVICE_ID = "token is used from unauthorized device, please login again"
 
