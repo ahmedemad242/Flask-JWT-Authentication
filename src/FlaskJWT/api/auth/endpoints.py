@@ -1,7 +1,6 @@
 """API endpoint definitions for /auth namespace."""
 
 from http import HTTPStatus
-from flask import request
 
 from flask_restx import Namespace, Resource
 

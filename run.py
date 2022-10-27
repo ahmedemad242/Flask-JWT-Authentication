@@ -1,12 +1,12 @@
 import os
 
 from dotenv import load_dotenv
-
-load_dotenv(".env")
-
 from FlaskJWT import create_app, db
 from FlaskJWT.models.user import User
 from FlaskJWT.models.refreshToken import RefreshToken
+
+load_dotenv(".env")
+
 
 app = create_app(os.getenv("FLASK_ENV", "production"))
 

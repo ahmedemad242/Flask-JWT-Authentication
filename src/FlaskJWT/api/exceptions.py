@@ -18,7 +18,7 @@ class ApiUnauthorized(Unauthorized):
         return [("Content-Type", "text/html"), ("WWW-Authenticate", self.WWWAuthValue)]
 
     def _getWWWAuthValue(self, error, errorDescription):
-        WWWAuthValue = f"Bearer"
+        WWWAuthValue = "Bearer"
         if error:
             WWWAuthValue += f', error="{error}"'
         if errorDescription:

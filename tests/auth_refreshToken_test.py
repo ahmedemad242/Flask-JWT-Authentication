@@ -7,12 +7,9 @@ import pytest
 from http import HTTPStatus
 
 
-from FlaskJWT.models.user import User
 from FlaskJWT.models.refreshToken import RefreshToken
 from tests.util import (
-    EMAIL,
     registerUser,
-    loginUser,
     refreshToken as refreshTokenHelper,
     getUser,
     EMAIL,
@@ -21,7 +18,7 @@ from tests.util import (
     UNAUTH_DEVICE_ID,
 )
 
-##TODO:: Rewrite test case with removing the string parsing into a more robust solution
+# TODO:: Rewrite test case with removing the string parsing into a more robust solution
 
 
 @pytest.mark.delay

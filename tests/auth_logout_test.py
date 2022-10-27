@@ -1,6 +1,5 @@
 """Unit tests for api.auth_logout API endpoint."""
 import json
-from http import HTTPStatus
 
 
 from FlaskJWT.models.user import User
@@ -10,7 +9,7 @@ from tests.util import registerUser, getUser, logoutUser
 
 SUCCESS = "successfully logged out"
 
-##TODO:: Rewrite test case with removing the string parsing into a more robust solution
+# TODO:: Rewrite test case with removing the string parsing into a more robust solution
 
 
 def test_logoutCurrentDevice(client, db):

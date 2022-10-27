@@ -9,7 +9,7 @@ from tests.util import EMAIL, registerUser, loginUser
 SUCCESS = "successfully logged in"
 UNAUTHORIZED = "Email or password are inncorrect."
 
-##TODO:: Rewrite test case with removing the string parsing into a more robust solution
+# TODO:: Rewrite test case with removing the string parsing into a more robust solution
 
 
 def test_login(client, db):
