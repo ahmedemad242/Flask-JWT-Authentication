@@ -16,6 +16,8 @@ $ python -m venv venv
 $ .\venv\scripts\activate
 $ pip install --upgrade pip setuptools wheel
 $ pip install -e .[dev]
+$ pre-commit install
+$ pre-commit install -t commit-msg
 ```
 
 ### Environment variables
