@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install
 RUN apt-get install -y \
     libpq-dev \
     gcc \
+    g++ \
     && apt-get clean
 
 
