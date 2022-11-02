@@ -31,7 +31,7 @@ jobs:
 
       - name: Extract tag
         shell: bash
-        run: echo "##[set-output name=release_tag;]$(echo ${GITHUB_REF#refs/tags/})"
+        run: echo "release_tag=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_OUTPUT
         id: extract_tag
 
       - name: Build, tag, and push image to amazon ECR
