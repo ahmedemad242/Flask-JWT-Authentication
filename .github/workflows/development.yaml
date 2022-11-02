@@ -1,10 +1,12 @@
-name: Run linter and tests
+name: Development
 
-on: [pull_request, push]
+on: [pull_request, workflow_call]
 
 jobs:
-  linter:
+  tox:
+    name: format, lint and test.
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: check out repo
         uses: actions/checkout@v3
