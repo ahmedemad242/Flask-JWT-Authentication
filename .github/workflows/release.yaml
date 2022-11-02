@@ -7,7 +7,7 @@ on:
 jobs:
   lint-test:
     name: Test and lint
-    uses: ahmedemad242/Flask-JWT-Authentication/.github/workflows/development.yml@main
+    uses: ./.github/workflows/development.yaml
 
   build-push:
     name: Build and push
