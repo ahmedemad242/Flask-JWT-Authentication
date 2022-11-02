@@ -33,6 +33,18 @@ jobs:
         shell: bash
         run: echo "release_tag=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_OUTPUT
         id: extract_tag
+        
+      - name: Add .env secrets
+        run: |
+          echo 'FLASK_APP=${{ secrets.FLASK_APP }}' >> .env
+          echo 'FLASK_ENV=${{ secrets.FLASK_ENV }}' >> .env
+          echo 'SECRET_KEY=${{ secrets.SECRET_KEY }}' >> .env
+          echo 'DB_USER=${{ secrets.DB_USER }}' >> .env
+          echo 'DB_PASSWORD=${{ secrets.DB_PASSWORD }}' >> .env
+          echo 'DB_HOST=${{ secrets.DB_HOST }}' >> .env
+          echo 'DB_PORT=${{ secrets.DB_PORT }}' >> .env
+          echo 'DB_NAME=${{ secrets.DB_NAME }}' >> .env
+
 
       - name: Build, tag, and push image to amazon ECR
         env:
